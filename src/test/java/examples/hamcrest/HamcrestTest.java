@@ -2,8 +2,11 @@ package examples.hamcrest;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.ArrayUtils;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -176,6 +179,19 @@ public class HamcrestTest {
 
     @Test
     public void testIterables() {
+        Iterable<Integer> a = ImmutableList.of(1, 2, 3);
+
+        assertThat(a, Matchers.<Integer>iterableWithSize(3));
+        assertThat(a, Matchers.<Integer>iterableWithSize(is(3)));
+
+        assertThat(a, contains(1, 2, 3));
+        assertThat(a, contains(is(1), is(2), is(3)));
+
+        assertThat("single item collection", ImmutableList.of(1), contains(is(1)));
+
+        assertThat(a, containsInAnyOrder(3, 1, 2));
+        assertThat(a, containsInAnyOrder(is(3), is(1), is(2)));
+
         // TODO
     }
 
