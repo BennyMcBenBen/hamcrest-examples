@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Test;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -11,7 +13,8 @@ import static org.junit.Assert.assertThat;
 
 /**
  * HamcrestTest contains examples of using Hamcrest matchers with assertThat.
- * <br/>For more examples, see https://github.com/hamcrest/JavaHamcrest unit tests under hamcrest-library/src/main/test.
+ * <p>
+ * For more examples, see https://github.com/hamcrest/JavaHamcrest unit tests under hamcrest-library/src/main/test.
  */
 public class HamcrestTest {
 
@@ -35,7 +38,9 @@ public class HamcrestTest {
         assertThat("foo", is(instanceOf(String.class)));
         assertThat("foo", isA(String.class)); // reads best
 
-        // TODO typeCompatibleWith
+        assertThat(List.class, typeCompatibleWith(List.class));
+        assertThat(List.class, typeCompatibleWith(Collection.class));
+        assertThat(LinkedList.class, typeCompatibleWith(List.class));
     }
 
     @Test
@@ -122,7 +127,7 @@ public class HamcrestTest {
     }
 
     @Test
-    public void teatJavaBeans() {
+    public void testJavaBeans() {
         assertThat("hasProperty can check the existence of a property",
                 new Person("Bob"), hasProperty("name")); // requires getter
         assertThat("hasProperty can check the existence of a property",
@@ -131,7 +136,13 @@ public class HamcrestTest {
         assertThat("hasProperty is very useful if you are working with a class with no equals implementation",
                 new Person("Bob"), hasProperty("name", equalTo("Bob")));
 
-        // TODO samePropertyValuesAs
+        assertThat(new Bean("s", 0), samePropertyValuesAs(new Bean("s", 0)));
+        assertThat(new Bean("s", 0), not(samePropertyValuesAs(new Bean("t", 0))));
+        assertThat(new Bean("s", 0), not(samePropertyValuesAs(new Bean("s", 1))));
+
+        assertThat(new SubBeanWithNoExtraProperties("s", 0), samePropertyValuesAs(new Bean("s", 0)));
+
+        assertThat(new SubBeanWithExtraProperty("s", 0), not(samePropertyValuesAs(new Bean("s", 0))));
     }
 
     @Test
@@ -183,9 +194,38 @@ public class HamcrestTest {
         // TODO
     }
 
-    public static class JavaBean {
+    public static class Bean {
         private String s;
         private int i;
+
+        public Bean(String s, int i) {
+            this.s = s;
+            this.i = i;
+        }
+
+        public String getS() {
+            return s;
+        }
+
+        public int getI() {
+            return i;
+        }
+    }
+
+    public static class SubBeanWithNoExtraProperties extends Bean {
+        public SubBeanWithNoExtraProperties(String s, int i) {
+            super(s, i);
+        }
+    }
+
+    public static class SubBeanWithExtraProperty extends Bean {
+        public SubBeanWithExtraProperty(String s, int i) {
+            super(s, i);
+        }
+
+        public String getExtra() {
+            return "extra";
+        }
     }
 
     public static class Person {
