@@ -182,6 +182,7 @@ public class HamcrestTest {
         assertThat(a, not(arrayContaining(3, 2, 1)));
         assertThat(a, arrayContaining(is(1), is(2), is(3)));
         assertThat(a, arrayContaining(Arrays.<Matcher<? super Integer>>asList(is(1), is(2), is(3))));
+        // Note: Java 8 is smarter about static method type inference and this works: assertThat(a, arrayContaining(Arrays.asList(is(1), is(2), is(3))));
 
         assertThat(a, arrayContainingInAnyOrder(1, 2, 3));
         assertThat(a, arrayContainingInAnyOrder(3, 2, 1));
