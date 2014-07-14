@@ -250,16 +250,6 @@ public class HamcrestTest {
         assertThat(m, hasValue(endsWith("1")));
     }
 
-    @Test
-    public void testXml() {
-        // TODO hasXPath
-    }
-
-    @Test
-    public void testFiles() {
-        // TODO
-    }
-
     public static class Bean {
         private String s;
         private int i;
